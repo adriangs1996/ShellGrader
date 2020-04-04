@@ -6,7 +6,6 @@ import time
 
 def run_commands(bash, hand, commands):
     for cmd in commands:
-        print(cmd)
         bash_out = bash.do_input(cmd)
         sh_out = hand.do_input(cmd)
         assert bash_out == sh_out, "Command execution failed, expected %s and got %s" % (
@@ -34,8 +33,9 @@ def test_nospaces_cmds(program):
 
 def test_multiple_spaces_cmds(program):
     cmds = [
-        "ls         -la         --color=never   |    wc", "echo           Hello     >  a.txt",
-        'echo    "."     > a.txt', "ls    --color=never  < a.txt    | wc     >> a.txt"
+        "ls         -la         --color=never   |    wc",
+        "echo           Hello     >  a.txt", 'echo    "."     > a.txt',
+        "ls    --color=never  < a.txt    | wc     >> a.txt"
     ]
     hand = handler.ShellHandler(program)
     bash = handler.ShellHandler("bash")
@@ -51,12 +51,12 @@ def test_background(program):
     handl.sendline("sleep 3 &")
     # inmediatly receive prompt
     handl.expect_exact(prompt, timeout=1)
-    handl.sendline("ps aux | grep sleep | head -n 1")
+    handl.sendline("ps aux | grep --color=never sleep | head -n 1")
     handl.expect_exact(prompt)
     assert "sleep 3" in handl.before, "Error, program sleep 3 not sended to background"
     handl.sendline("sleep 5")
     handl.expect_exact(prompt)
-    handl.sendline("ps aux | grep sleep | head -n 1")
+    handl.sendline("ps aux | grep --color=never sleep | head -n 1")
     handl.expect_exact(prompt)
     assert "sleep 3" not in handl.before, "Error, program sleep 3 not executed in background"
     handl.terminate(force=True)

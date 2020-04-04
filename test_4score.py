@@ -4,7 +4,6 @@ import pytest
 
 def run_commands(bash, hand, commands):
     for cmd in commands:
-        print(cmd)
         bash_out = bash.do_input(cmd)
         sh_out = hand.do_input(cmd)
         assert bash_out == sh_out, "Command execution failed, expected %s and got %s" % (
