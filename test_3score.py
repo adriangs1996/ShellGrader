@@ -57,16 +57,25 @@ def test_cd_command(program):
     prompt = hand.after
     hand.sendline("mkdir testdir")
     hand.expect_exact(prompt)
+    hand.sendline("pwd")
+    hand.expect_exact(prompt)
+    out = hand.before
     hand.sendline("cd testdir")
     hand.expect(".+")
     prompt2 = hand.after
-    assert prompt != prompt2, "Bad implementation of cd"
+    hand.sendline("pwd")
+    hand.expect_exact(prompt2)
+    out2 = hand.before
+    assert out2 != out, "Bad implementation of cd"
     hand.sendline("cd ..")
     hand.expect_exact(prompt)
     hand.sendline("cd ~")
     hand.expect(".+")
     home = hand.after
-    assert prompt != home, "Bad implementation of cd"
+    hand.sendline("pwd")
+    hand.expect_exact(home)
+    out2 = hand.before
+    assert out2 != out, "Bad implementation of cd"
     hand.terminate(force=True)
 
 
