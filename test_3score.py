@@ -22,12 +22,12 @@ def program(pytestconfig):
 
 def test_command_execution(program):
     commands = [
-        "ls -la",
+        "ls -la --color=never",
         'echo "Hello from my Shell"',
         'echo "This Is a very Long String' + "A" * 1000 + '"',
         'echo "This string contains chars and other things .912345&*<>again()?/_-+     ~#@%"',
     ]
-    bash = handler.ShellHandler("sh")
+    bash = handler.ShellHandler("bash")
     hand = handler.ShellHandler(program)
 
     run_commands(bash, hand, commands)
@@ -35,17 +35,17 @@ def test_command_execution(program):
 
 def test_command_redirection_simple_pipe(program):
     commands = [
-        "ls -la | wc",
-        "ls -la | wc > a.txt",
+        "ls -la --color=never | wc",
+        "ls -la --color=never | wc > a.txt",
         "cat a.txt",
         'echo "Hello Im Writing to the end of a file" >> a.txt',
         "cat a.txt",
         "wc < a.txt",
         'echo "." > a.txt',
-        "ls < a.txt | wc > b.txt",
-        "ls > a.txt | wc",
+        "ls --color=never < a.txt | wc > b.txt",
+        "ls --color=never > a.txt | wc",
     ]
-    bash = handler.ShellHandler("sh")
+    bash = handler.ShellHandler("bash")
     hand = handler.ShellHandler(program)
 
     run_commands(bash, hand, commands)
@@ -76,7 +76,7 @@ def test_comments(program):
         "# This line should also get ignored",
         "### This is ignored too",
     ]
-    bash = handler.ShellHandler("sh")
+    bash = handler.ShellHandler("bash")
     hand = handler.ShellHandler(program)
 
     run_commands(bash, hand, commands)
@@ -84,16 +84,16 @@ def test_comments(program):
 
 def test_garbage_command(program):
     hand = handler.ShellHandler(program)
-    bash = handler.ShellHandler("sh")
+    bash = handler.ShellHandler("bash")
 
     cmds = [
-        '"ls"',  # this is a valid command
+        '"ls --color=never"',  # this is a valid command
         '"echo" "ThisShouldWorkToo"'
     ]
     run_commands(bash, hand, cmds)
     hand = handler.ShellHandler(program)
     # this has to fail
-    out = hand.do_input("garbage command ls -la -print | grep | tail")
+    out = hand.do_input("garbage command ls -la --color=never -print | grep | tail")
     assert "not found" in out, "Garbage is not a valid command"
     hand.do_end()
 

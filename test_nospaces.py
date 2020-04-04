@@ -22,23 +22,23 @@ def program(pytestconfig):
 
 def test_nospaces_cmds(program):
     cmds = [
-        "ls -la|wc", 'echo ".">a.txt', "ls<a.txt",
-        "find ~/ -print -type f|grep share>>a.txt"
+        "ls -la --color=never|wc", 'echo ".">a.txt', "ls --color=never<a.txt",
+        "find ~/ -print -type f|grep --color=never share>>a.txt"
     ]
 
     hand = handler.ShellHandler(program)
-    bash = handler.ShellHandler("sh")
+    bash = handler.ShellHandler("bash")
 
     run_commands(bash, hand, cmds)
 
 
 def test_multiple_spaces_cmds(program):
     cmds = [
-        "ls         -la |    wc", "echo           Hello     >  a.txt",
-        'echo    "."     > a.txt', "ls     < a.txt    | wc     >> a.txt"
+        "ls         -la         --color=never   |    wc", "echo           Hello     >  a.txt",
+        'echo    "."     > a.txt', "ls    --color=never  < a.txt    | wc     >> a.txt"
     ]
     hand = handler.ShellHandler(program)
-    bash = handler.ShellHandler("sh")
+    bash = handler.ShellHandler("bash")
 
     run_commands(bash, hand, cmds)
 

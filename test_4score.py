@@ -20,11 +20,11 @@ def program(pytestconfig):
 
 def test_multiple_pipes(program):
     commands = [
-        "ls -la | sort | uniq | wc", "echo H" + "i" * 2000 + " | wc" * 200,
-        'echo "." > a1.txt', "ls -la < a.txt | sort | uniq | grep a >> a1.txt",
+        "ls -la --color=never | sort | uniq | wc", "echo H" + "i" * 8000 + " | wc" * 200,
+        'echo "." > a1.txt', "ls -la --color=never < a.txt | sort | uniq | grep a >> a1.txt",
     ]
 
-    bash = handler.ShellHandler("sh")
+    bash = handler.ShellHandler("bash")
     hand = handler.ShellHandler(program)
 
     run_commands(bash, hand, commands)
