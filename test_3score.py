@@ -53,26 +53,30 @@ def test_command_redirection_simple_pipe(program):
 
 def test_cd_command(program):
     hand = pexpect.spawn(program, encoding="utf-8")
-    hand.expect(".*")
+    hand.expect(".+")
     prompt = hand.after
     hand.sendline("mkdir testdir")
     hand.expect_exact(prompt)
-    hand.sendline("pwd")
+    hand.sendline("ls")
     hand.expect_exact(prompt)
     out = hand.before
     hand.sendline("cd testdir")
     hand.expect(".+")
-    prompt2 = hand.after
-    hand.sendline("pwd")
+    # After this in stdin is also the cd testdir command
+    # so we have to split the result to get the new prompt
+    prompt2 = hand.after.split("\n")[1]
+    hand.sendline("ls")
     hand.expect_exact(prompt2)
     out2 = hand.before
     assert out2 != out, "Bad implementation of cd"
     hand.sendline("cd ..")
     hand.expect_exact(prompt)
+    hand.sendline("rm testdir")
+    hand.expect_exact(prompt)
     hand.sendline("cd ~")
     hand.expect(".+")
-    home = hand.after
-    hand.sendline("pwd")
+    home = hand.after.split("\n")[1]
+    hand.sendline("ls -la")
     hand.expect_exact(home)
     out2 = hand.before
     assert out2 != out, "Bad implementation of cd"

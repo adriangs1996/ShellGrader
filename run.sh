@@ -1,7 +1,7 @@
 mysh=""
 
 if [ $1 ]; then
-    mysh=$(find ~/ 2>/dev/null -type f -perm /u=x -print | grep $1 | uniq | head -n 1);
+    mysh=$1
 else
     mysh=$(find ~/ 2>/dev/null -type f -perm /u=x -print | grep "mysh" | uniq | head -n 1);
 fi

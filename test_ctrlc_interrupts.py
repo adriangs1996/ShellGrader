@@ -29,6 +29,7 @@ def test_ctrlc_interruption(program):
     handl.do_cmd_nowait("cat &")
     assert handl.do_wait_prompt(1), "Cat & not running in background"
     handl.do_interrupt()
+    handl.do_wait_prompt()
     cmd_result = handl.do_input("jobs | grep --color=never cat")
     assert "cat" in "".join(cmd_result.split("\r\n")[1:])
     handl.do_end()
